@@ -3,6 +3,7 @@ package it.prova.agendarest.service;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -18,8 +19,12 @@ public class AgendaServiceImpl implements AgendaService{
 	
 	@Autowired
 	private AgendaRepository repository;
+	
+	
 
 	public List<Agenda> listAllElements(boolean eager) {
+		String username = SecurityContextHolder.getContext().getAuthentication().getName();
+		System.out.println(username);
 		if (eager)
 			return (List<Agenda>) repository.findAllAgendaEager();
 
@@ -49,5 +54,12 @@ public class AgendaServiceImpl implements AgendaService{
 		repository.findById(idToRemove)
 				.orElseThrow(() -> new FilmNotFoundException("Agenda not found con id: " + idToRemove));
 		repository.deleteById(idToRemove);
+	}
+
+	@Override
+	public List<Agenda> FindByUsername() {
+		String usernameInSessione = SecurityContextHolder.getContext().getAuthentication().getName();
+		
+		return repository.FindByUsername(usernameInSessione);
 	}
 }

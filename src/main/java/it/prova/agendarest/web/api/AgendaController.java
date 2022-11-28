@@ -26,8 +26,9 @@ public class AgendaController {
 	private AgendaService agendaService;
 	
 	@GetMapping
-	public List<AgendaDTO> getAll() {
-		return AgendaDTO.createAgendaDTOListFromModelList(agendaService.listAllElements(true), true);
+	public List<AgendaDTO> getAllby() {
+		
+		return AgendaDTO.createAgendaDTOListFromModelList(agendaService.FindByUsername(), true);
 	}
 	
 	// gli errori di validazione vengono mostrati con 400 Bad Request ma
