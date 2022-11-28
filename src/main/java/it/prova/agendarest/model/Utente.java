@@ -1,19 +1,23 @@
 package it.prova.agendarest.model;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
+import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -44,6 +48,9 @@ public class Utente {
 	@ManyToMany
 	@JoinTable(name = "utente_ruolo", joinColumns = @JoinColumn(name = "utente_id", referencedColumnName = "ID"), inverseJoinColumns = @JoinColumn(name = "ruolo_id", referencedColumnName = "ID"))
 	private Set<Ruolo> ruoli = new HashSet<>(0);
+	
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "utente")
+	private List<Agenda> agende = new ArrayList<>();
 
 	public Utente() {
 	}
@@ -156,5 +163,15 @@ public class Utente {
 	public void setEmail(String email) {
 		this.email = email;
 	}
+
+	public List<Agenda> getAgende() {
+		return agende;
+	}
+
+	public void setAgende(List<Agenda> agende) {
+		this.agende = agende;
+	}
+	
+	
 
 }
