@@ -28,7 +28,6 @@ public class AgendaDTO {
 	private LocalDate dataOraFine;
 	
 	@JsonIgnoreProperties(value = { "agende" })
-	@NotNull(message = "{utente.notnull}")
 	private UtenteDTO utenteDTO;
 	
 	public AgendaDTO() {
@@ -55,6 +54,8 @@ public class AgendaDTO {
 		this.dataOraInizio = dataOraInizio;
 		this.dataOraFine = dataOraFine;
 	}
+	
+	
 
 	public Long getId() {
 		return id;
@@ -97,9 +98,11 @@ public class AgendaDTO {
 	}
 	
 	public Agenda buildAgendaModel() {
-		Agenda result = new Agenda(this.id, this.descrizione, this.dataOraInizio, this.dataOraFine);
-		if (this.utenteDTO != null)
-			result.setUtente(this.utenteDTO.buildUtenteModel(true));
+		Agenda result = new Agenda(this.id, this.descrizione, this.dataOraInizio, this.dataOraFine, 
+				this.utenteDTO.buildUtenteModel(true));
+		
+		/*if (this.utenteDTO != null)
+			result.setUtente(this.utenteDTO.buildUtenteModel(true));*/
 
 		return result;
 	}
