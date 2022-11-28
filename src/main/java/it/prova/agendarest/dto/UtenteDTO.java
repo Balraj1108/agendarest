@@ -1,11 +1,15 @@
 package it.prova.agendarest.dto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Date;
+import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.Size;
+
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
 import it.prova.agendarest.model.Ruolo;
 import it.prova.agendarest.model.StatoUtente;
@@ -39,6 +43,9 @@ public class UtenteDTO {
 	private StatoUtente stato;
 
 	private Long[] ruoliIds;
+	
+	@JsonIgnoreProperties(value = { "utente" })
+	private List<AgendaDTO> agende = new ArrayList<>();
 
 	public UtenteDTO() {
 	}
@@ -131,6 +138,16 @@ public class UtenteDTO {
 	public void setRuoliIds(Long[] ruoliIds) {
 		this.ruoliIds = ruoliIds;
 	}
+	
+	
+
+	public List<AgendaDTO> getAgende() {
+		return agende;
+	}
+
+	public void setAgende(List<AgendaDTO> agende) {
+		this.agende = agende;
+	}
 
 	public Utente buildUtenteModel(boolean includeIdRoles) {
 		Utente result = new Utente(this.id, this.username, this.password, this.nome, this.cognome, this.email,
@@ -141,14 +158,18 @@ public class UtenteDTO {
 		return result;
 	}
 
+	
 	// niente password...
-	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel) {
+	public static UtenteDTO buildUtenteDTOFromModel(Utente utenteModel, boolean includeAgende) {
 		UtenteDTO result = new UtenteDTO(utenteModel.getId(), utenteModel.getUsername(), utenteModel.getNome(),
 				utenteModel.getCognome(), utenteModel.getStato());
 
 		if (!utenteModel.getRuoli().isEmpty())
 			result.ruoliIds = utenteModel.getRuoli().stream().map(r -> r.getId()).collect(Collectors.toList())
 					.toArray(new Long[] {});
+		
+		if(includeAgende)
+			result.setAgende(AgendaDTO.createAgendaDTOListFromModelList(utenteModel.getAgende(), false));
 
 		return result;
 	}
